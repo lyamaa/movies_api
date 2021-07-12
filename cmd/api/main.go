@@ -13,6 +13,7 @@ import (
 	// Import the pq driver so that it can register itself with the database/sql
 	// package. Note that we alias this import to the blank identifier, to stop the Go
 	// compiler complaining that the package isn't being used.
+
 	_ "github.com/lib/pq"
 )
 
@@ -80,12 +81,33 @@ func main() {
 	// established.
 	logger.Printf("database connection pool established")
 
+	// migrationDriver, err := postgres.WithInstance(db, &postgres.Config{})
+	// if err != nil {
+	// 	logger.Fatal(err, nil)
+	// }
+
+	// migrator, err := migrate.NewWithDatabaseInstance("../../migrations/000001_create_movies_table.up.sql", "postgres", migrationDriver)
+	// if err != nil {
+	// 	logger.Fatal(err, nil)
+	// }
+
 	// Declare an instance of the application struct, containing the config struct and
 	// the logger
 	app := &application{
 		config: cfg,
 		logger: logger,
 	}
+
+	// err = migrator.Up()
+	// if err != nil && err != migrate.ErrNoChange {
+	// 	logger.Fatal(err, nil)
+	// }
+
+	// err = migrator.Up()
+	// if err != nil && err != migrate.ErrNoChange {
+	// 	logger.Fatal(err, nil)
+	// }
+	// logger.Printf("database migrations applied")
 
 	// Use the httprouter instance returned by app.routes() as the server handler.
 	srv := &http.Server{
