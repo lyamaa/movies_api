@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/lyamaa/internal/data"
 )
 
 // Add a createMovieHandler for the "POST /v1/movies" endpoint. For now we simply
@@ -21,6 +24,21 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 		http.NotFound(w, r)
 		return
 	}
-	// Otherwise, interpolate the movie ID in a placeholder response.
-	fmt.Fprintf(w, "Show the details of movie %d\n", id)
+
+	// Create a new instance of the Movie struct, containing the ID we extracted from
+	// the URL and some dummy data. Also notice that we deliberately haven't set a
+	// value for the Year field.
+	movie := data.Movie{
+		ID:        id,
+		CreatedAt: time.Now(),
+		Runtime:   102,
+		Genres:    []string{"drama", "romance", "horror", "war"},
+		Version:   1,
+	}
+
+	err = app.writeJSON(w, http.StatusOK, movie, nil)
+	if err != nil {
+		app.logger.Println(err)
+		http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
+	}
 }
